@@ -31,14 +31,24 @@ var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
+console.log(/^\d+$/.test("1451001600000"))
+console.log(/^\d+$/.test("1451001asf600000"))
+console.log(/^\d+$/.test("1451001600000asa"))
+console.log(/^\d+$/.test("faf1451001600000"))
+
 app.get('/api/', (req, res) => {
   let newDate = new Date()
     res.json({"unix": newDate.getTime(), "utc": newDate.toUTCString()})
 })
 
-
 app.get('/api/:date?', (req, res) => {
-    let newDate = new Date(req.params.date)
+  let isNum = /^\d+$/.test(req.params.date),
+  newDate
+  if(isNum){
+    newDate = new Date(Number(req.params.date))
+  }else{
+    newDate = new Date(req.params.date)
+  }
     if(newDate == "Invalid Date") {
       res.json({error : "Invalid Date"})
     } 
